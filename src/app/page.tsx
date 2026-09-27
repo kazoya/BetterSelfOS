@@ -1,69 +1,33 @@
-import Image from "next/image";
-
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
-}
+"use client";
+import {BrainCircuit,CalendarDays,Check,CircleDollarSign,Clock3,CodeXml,HeartPulse,Languages,Lightbulb,LockKeyhole,RotateCcw,Sparkles,Users,X} from "lucide-react";
+import {useEffect,useMemo,useState} from "react";
+type Lang="ar"|"en"; type Space="week"|"self"|"money"|"people"|"ideas"; type Status="now"|"next"|"waiting"|"habit"|"idea";
+type Task={id:number;ar:string;en:string;space:Space;status:Status;score:number;minutes:number};
+const seed:Task[]=[
+{id:1,ar:"مراجعة عرض المشروع",en:"Review the project proposal",space:"week",status:"now",score:25,minutes:35},
+{id:2,ar:"تعلّم Next.js بتركيز",en:"Focused Next.js practice",space:"self",status:"next",score:21,minutes:60},
+{id:3,ar:"مراجعة التدفق النقدي",en:"Review monthly cash flow",space:"money",status:"next",score:20,minutes:45},
+{id:4,ar:"المشي بعد العشاء",en:"Walk after dinner",space:"self",status:"habit",score:17,minutes:20},
+{id:5,ar:"مكالمة عائلية مؤجلة",en:"Pending family call",space:"people",status:"waiting",score:15,minutes:15},
+{id:6,ar:"فكرة منتج جانبي",en:"Side-product idea",space:"ideas",status:"idea",score:11,minutes:25}];
+const c={
+ar:{product:"مساعد الأولويات",today:"اليوم",priorities:"الأولويات",habits:"العادات",insights:"الرؤى",privacy:"الخصوصية",heading:"رتّب ما يستحق انتباهك",sub:"مساحات واضحة، قرار واحد في كل مرة، وذكاء يساعدك دون أن يتملّك بياناتك.",spaces:"مساحات الحياة",map:"خريطة الأولويات",queue:"طابور القرار",arrange:"رتّبني",planned:"خطة اليوم",local:"الترتيب يتم محليًا في هذا النموذج.",consent:"تدريب AI على بياناتي",consentNote:"متوقف افتراضيًا، ويتطلب موافقة مستقلة وواضحة.",empty:"لا توجد عناصر هنا بعد.",now:"الآن",next:"لاحقًا",waiting:"ينتظر قرارًا",habit:"عادة مستمرة",idea:"فكرة فقط",week:"هذا الأسبوع",self:"نظامي الشخصي",money:"وضوح المال",people:"الناس",ideas:"أفكار لاحقة",secretTitle:"مختبر الرموز السرّي",secretFact:"الحقيقة المضحكة: الموديل لا يحاسبك على خفة دمك، بل على ما يقرأه وما يولّده. كلما طال الأخذ والرد والسياق، زادت الرموز عادةً.",secretAdvice:"فلا تتمايص في سؤالك يا أخي المبرمج إن كانت ميزانيتك على الحديدة مثلي :] اسأل بوضوح وحدد المطلوب ودع RCTC يرتّب الفكرة. وإن كنت مرتاحًا… فكن زنخًا وثقيل دم براحتك :]",attribution:"صيغت هذه الرسالة بمساعدة نموذج متقدم من OpenAI، واستندت حقيقتها التقنية إلى شرح OpenAI الرسمي للرموز.",riddle:"لغز المهارة: أنا أربعة أحرف، أبدأ بدور، وأحمل سياقًا، وأنتهي بقيود. من أنا؟",answer:"RCTC — Role, Context, Task, Constraints",reveal:"اكشف الحل",source:"المصدر الرسمي",skill:"مهارة RCTC على GitHub"},
+en:{product:"BetterSelf OS",today:"Today",priorities:"Priorities",habits:"Habits",insights:"Insights",privacy:"Privacy",heading:"Arrange what deserves your attention",sub:"Clear life spaces, one decision at a time, and intelligence that helps without owning your data.",spaces:"Life spaces",map:"Priority map",queue:"Decision queue",arrange:"Arrange me",planned:"Today’s plan",local:"Arrangement runs locally in this prototype.",consent:"Train AI on my data",consentNote:"Off by default and requires separate, explicit consent.",empty:"Nothing here yet.",now:"Now",next:"Next",waiting:"Waiting for a decision",habit:"Ongoing habit",idea:"Just an idea",week:"This week",self:"My system",money:"Money clarity",people:"People",ideas:"Later ideas",secretTitle:"The secret token lab",secretFact:"The funny truth: models do not meter your sense of humor. They process input and generate output; longer exchanges and repeated context generally mean more tokens.",secretAdvice:"If your budget is living dangerously, ask clearly, name the outcome, and let RCTC structure the thought. If you are flush with tokens… be gloriously long-winded :]",attribution:"This message was polished with an advanced OpenAI model and its technical claim follows OpenAI’s official token explanation.",riddle:"Skill riddle: I begin with a role, carry context and a task, and end with constraints. What am I?",answer:"RCTC — Role, Context, Task, Constraints",reveal:"Reveal answer",source:"Official source",skill:"RCTC skill on GitHub"}};
+const spaceIcons={week:CalendarDays,self:HeartPulse,money:CircleDollarSign,people:Users,ideas:Lightbulb};
+const statusIcons={now:Sparkles,next:CalendarDays,waiting:Clock3,habit:RotateCcw,idea:Lightbulb};
+export default function Home(){
+const[lang,setLang]=useState<Lang>("ar"),[space,setSpace]=useState<Space>("week"),[tasks,setTasks]=useState(seed),[plan,setPlan]=useState<Task|null>(null),[training,setTraining]=useState(false),[passes,setPasses]=useState(0),[secret,setSecret]=useState(false),[answer,setAnswer]=useState(false);
+const t=c[lang],rtl=lang==="ar",visible=useMemo(()=>tasks.filter(i=>i.space===space).sort((a,b)=>b.score-a.score),[space,tasks]);
+useEffect(()=>{const close=(event:KeyboardEvent)=>{if(event.key==="Escape")setSecret(false)};window.addEventListener("keydown",close);return()=>window.removeEventListener("keydown",close)},[]);
+const arrange=()=>{const best=visible[0];if(!best)return;setPlan(best);setTasks(items=>items.map(i=>i.id===best.id?{...i,status:"now"}:i));};
+const hover=()=>{const n=passes+1;setPasses(n);if(n>=6){setSecret(true);setPasses(0)}};
+return <main dir={rtl?"rtl":"ltr"} className="app-shell">
+<header className="topbar"><button className="brand" onMouseEnter={hover} onClick={hover}><span className="brand-mark"><BrainCircuit size={25}/></span><span><b>BetterSelf OS</b><small>{t.product}</small></span></button><nav>{[t.today,t.priorities,t.habits,t.insights,t.privacy].map((x,i)=><button key={x} className={i===1?"active":""}>{x}</button>)}</nav><button className="icon-button" onClick={()=>setLang(rtl?"en":"ar")} title={rtl?"English":"العربية"}><Languages size={20}/></button></header>
+<section className="intro"><div><p className="eyebrow"><LockKeyhole size={15}/>{t.local}</p><h1>{t.heading}</h1><p>{t.sub}</p></div><div className="consent-panel"><div><b>{t.consent}</b><small>{t.consentNote}</small></div><button role="switch" aria-checked={training} className={"switch "+(training?"on":"")} onClick={()=>setTraining(!training)}><span/></button></div></section>
+<section className="workspace"><Heading n="01" text={t.spaces}/><div className="spaces">{(Object.keys(spaceIcons) as Space[]).map(k=>{const I=spaceIcons[k];return <button key={k} onClick={()=>setSpace(k)} className={space===k?"selected":""}><I size={21}/><span>{t[k]}</span><small>{tasks.filter(i=>i.space===k).length}</small></button>})}</div>
+<div className="command-bar"><div><span>{t[space]}</span><p>{plan?t.planned+": "+(rtl?plan.ar:plan.en):(rtl?"اختر الحركة الأعلى أثرًا الآن.":"Choose the highest-leverage move now.")}</p></div><button onClick={arrange}><Sparkles size={18}/>{t.arrange}</button></div>
+<div className="board"><section className="priority-map"><Heading n="02" text={t.map}/><div className="status-grid">{(Object.keys(statusIcons) as Status[]).map(s=>{const I=statusIcons[s],items=visible.filter(x=>x.status===s);return <article key={s}><header><I size={18}/><b>{t[s]}</b><em>{items.length}</em></header>{items.length?items.map(x=><button key={x.id} onClick={()=>setPlan(x)}><span>{rtl?x.ar:x.en}</span><small>{x.minutes}{rtl?" د":"m"}</small></button>):<p>{t.empty}</p>}</article>})}</div></section>
+<aside className="queue"><Heading n="03" text={t.queue}/>{visible.length?visible.map((x,i)=><button key={x.id} onClick={()=>setPlan(x)} className={plan?.id===x.id?"chosen":""}><strong>{String(i+1).padStart(2,"0")}</strong><span>{rtl?x.ar:x.en}<small>{x.score} {rtl?"نقطة أثر":"impact points"}</small></span>{plan?.id===x.id&&<Check size={18}/>}</button>):<p>{t.empty}</p>}</aside></div></section>
+<footer><span>BetterSelf OS · {rtl?"نموذج عملي للأولويات":"A practical priority system"}</span><a href="https://github.com/kazoya/rctc-skill" target="_blank" rel="noreferrer"><CodeXml size={17}/>kazoya/rctc-skill</a></footer>
+{secret&&<div className="modal-backdrop" onMouseDown={()=>setSecret(false)}><section className="secret-modal" onMouseDown={e=>e.stopPropagation()}><button className="close" onClick={()=>setSecret(false)}><X/></button><div className="secret-icon"><BrainCircuit/></div><p className="eyebrow">6× HOVER UNLOCKED</p><h2>{t.secretTitle}</h2><p className="fact">{t.secretFact}</p><blockquote>{t.secretAdvice}</blockquote><p className="attribution">{t.attribution}</p><div className="riddle"><Lightbulb/><p>{t.riddle}</p>{answer?<strong>{t.answer}</strong>:<button onClick={()=>setAnswer(true)}>{t.reveal}</button>}</div><div className="secret-links"><a href="https://help.openai.com/en/articles/4936856-understanding-and-counting-tokens" target="_blank" rel="noreferrer">{t.source}</a><a href="https://github.com/kazoya/rctc-skill" target="_blank" rel="noreferrer">{t.skill}</a></div></section></div>}</main>}
+function Heading({n,text}:{n:string;text:string}){return <div className="section-heading"><div><span>{n}</span><h2>{text}</h2></div></div>}
